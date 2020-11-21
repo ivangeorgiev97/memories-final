@@ -1,13 +1,17 @@
 package uni.fmi.masters.bean;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "memory")
 public class MemoryBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,19 +55,4 @@ public class MemoryBean {
 		this.description = description;
 	}
 
-	public UserBean getUser() {
-		return user;
-	}
-
-	public void setUser(UserBean user) {
-		this.user = user;
-	}
-
-	public CategoryBean getCategory() {
-		return category;
-	}
-
-	public void setCategory(CategoryBean category) {
-		this.category = category;
-	}
 }
