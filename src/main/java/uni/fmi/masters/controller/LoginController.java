@@ -67,7 +67,6 @@ public class LoginController {
 				
 					HttpSession http = attr.getRequest().getSession(true);
 					http.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-					
 				}
 				
 				return "memories.html";
@@ -84,7 +83,6 @@ public class LoginController {
 	}
 		
 	private String hashPassword(String password) {
-		
 		StringBuilder result = new StringBuilder();
 		
 		try {
