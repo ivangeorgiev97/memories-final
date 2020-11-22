@@ -13,19 +13,19 @@
          <form id="register-form" action="register" method="POST">
              <div class="form-group">
                  <label for="username">Потребител</label>
-                 <input type="text" class="form-control" id="username" name="username" placeholder="Потребител" required>
+                 <input type="text" class="form-control" id="username" name="username" placeholder="Потребител" required minlength="4">
              </div>
              <div class="form-group">
                  <label for="email">Email</label>
-                 <input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" required>
+                 <input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" required minlength="4">
              </div>
              <div class="form-group">
                  <label for="password">Парола</label>
-                 <input type="password" class="form-control" id="password" name="password" placeholder="Парола" required>
+                 <input type="password" class="form-control" id="password" name="password" placeholder="Парола" required minlength="4">
              </div>
              <div class="form-group">
                  <label for="repeatPassword">Повторете паролата</label>
-                 <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Повторете паролата" required>
+                 <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Повторете паролата" required minlength="4">
              </div>
              <input type="submit" class="btn btn-primary" value="Регистрирай се">
          </form>
