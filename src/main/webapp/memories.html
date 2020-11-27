@@ -47,7 +47,7 @@
                 <h3>Вашите спомени:</h3>
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="form-group">
                             <label for="sort-by">Сортирай по (с ajax заявка)</label>
                             <select class="form-control custom-select" id="sort-by">
@@ -58,7 +58,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="form-group">
                             <label for="from-id">ID филтриране (без ajax заявка)</label>
                             <select class="form-control custom-select" id="from-id">
@@ -66,6 +66,15 @@
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="15">15</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="from-id">Филтриране по категория</label>
+                            <select class="form-control custom-select" id="categoryId">
+                                <option value="" selected disabled hidden>Моля изберете</option>
+                                <!-- TODO - Add categories here -->
                             </select>
                         </div>
                     </div>
