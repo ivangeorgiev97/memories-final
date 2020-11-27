@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // API Url
-    const apiUrl = 'http://localhost:8000/api/memories';
+    const apiUrl = 'http://localhost:8080/memories';
 
     let darkMode = false;
     let currentResult = [];

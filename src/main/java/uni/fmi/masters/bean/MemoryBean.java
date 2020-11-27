@@ -23,6 +23,22 @@ public class MemoryBean {
 	@Column(name = "description", length = 1000)
 	private String description;
 	
+	public UserBean getUser() {
+		return user;
+	}
+
+	public void setUser(UserBean user) {
+		this.user = user;
+	}
+
+	public CategoryBean getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryBean category) {
+		this.category = category;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private UserBean user;
