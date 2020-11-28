@@ -1,5 +1,6 @@
 package uni.fmi.masters.bean;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -13,15 +14,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import lombok.Data;
+
 import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "user")
-public class UserBean {
+@Data
+public class UserBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 
 	@Column(name="username", nullable = false, unique = true, length = 40)
 	private String username;
@@ -40,18 +46,11 @@ public class UserBean {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<MemoryBean> memories;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "account_role", 
 	joinColumns=@JoinColumn(name="account_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
 	private Set<UserRoleBean> roles;
 	
-	public Set<UserRoleBean> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<UserRoleBean> roles) {
-		this.roles = roles;
-	}
 
 	public UserBean() {}
 	
@@ -65,56 +64,5 @@ public class UserBean {
 		this.password = password;
 		this.email = email;	
 	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/*
-	public String getUserImage() {
-		return userImage;
-	}
-
-	public void setUserImage(String userImage) {
-		this.userImage = userImage;
-	}
-	*/
-
-	public List<MemoryBean> getMemories() {
-		return memories;
-	}
-
-	public void setMemories(List<MemoryBean> memories) {
-		this.memories = memories;
-	}	
 
 }

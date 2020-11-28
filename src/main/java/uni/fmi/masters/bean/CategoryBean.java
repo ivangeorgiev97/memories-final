@@ -1,5 +1,6 @@
 package uni.fmi.masters.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,9 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "category")
-public class CategoryBean {
+@Data
+public class CategoryBean implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -23,28 +29,4 @@ public class CategoryBean {
 	
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	private List<MemoryBean> memories;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<MemoryBean> getMemories() {
-		return memories;
-	}
-
-	public void setMemories(List<MemoryBean> memories) {
-		this.memories = memories;
-	}
 }	

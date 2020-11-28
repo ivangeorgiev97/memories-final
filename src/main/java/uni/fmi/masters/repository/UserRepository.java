@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import uni.fmi.masters.bean.UserBean;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserBean, Integer> {
+public interface UserRepository extends JpaRepository<UserBean, Long> {
 	UserBean getUserByUsernameAndPassword(String username, String password);
 	
 	UserBean getByUsername(String username);

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import uni.fmi.masters.bean.MemoryBean;
 
 @Repository
-public interface MemoryRepository extends JpaRepository<MemoryBean, Integer> {
+public interface MemoryRepository extends JpaRepository<MemoryBean, Long> {
 
 }

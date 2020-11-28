@@ -27,7 +27,7 @@ public class MemoryController {
 	}
 	
 	@GetMapping("/memories/{id}")
-	MemoryBean getmemoryById(@PathVariable Integer id) {
+	MemoryBean getMemoryById(@PathVariable Long id) {
 		return memoryRepository.findById(id).get();
 	}
 	
@@ -37,7 +37,7 @@ public class MemoryController {
 	}
 	
 	@PutMapping("/memories/{id}")
-	MemoryBean updatememory(@RequestBody MemoryBean updatedMemory, @PathVariable Integer id) {
+	MemoryBean updatememory(@RequestBody MemoryBean updatedMemory, @PathVariable Long id) {
 		return memoryRepository.findById(id).map(memory -> {
 			memory.setTitle(updatedMemory.getTitle());
 			memory.setDescription(updatedMemory.getDescription());
@@ -53,7 +53,7 @@ public class MemoryController {
 	}
 	
 	@DeleteMapping("/memories/{id}")
-	void deleteCatgory(@PathVariable Integer id) {
+	void deleteCatgory(@PathVariable Long id) {
 		memoryRepository.deleteById(id);
 	}
 	

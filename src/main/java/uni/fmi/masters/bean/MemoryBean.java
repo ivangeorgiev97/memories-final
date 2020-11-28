@@ -10,65 +10,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "memory")
+@Data
 public class MemoryBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	@Column(name = "title", length = 250, nullable = false)
 	private String title;
 	
 	@Column(name = "description", length = 1000)
 	private String description;
-	
-	public UserBean getUser() {
-		return user;
-	}
 
-	public void setUser(UserBean user) {
-		this.user = user;
-	}
-
-	public CategoryBean getCategory() {
-		return category;
-	}
-
-	public void setCategory(CategoryBean category) {
-		this.category = category;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserBean user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id")
 	private CategoryBean category;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 }

@@ -82,7 +82,7 @@ public class LoginController {
 		return "error.html";
 	}
 		
-	private String hashPassword(String password) {
+	public static String hashPassword(String password) {
 		StringBuilder result = new StringBuilder();
 		
 		try {
