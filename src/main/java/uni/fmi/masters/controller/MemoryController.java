@@ -11,50 +11,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import uni.fmi.masters.bean.MemoryBean;
-import uni.fmi.masters.repository.MemoryRepository;
+import uni.fmi.masters.service.MemoryService;
 
 @RestController
 public class MemoryController {
-	private MemoryRepository memoryRepository;
+	private MemoryService memoryService;
 	
-	public MemoryController(MemoryRepository memoryRepository) {
-		this.memoryRepository = memoryRepository;
+	public MemoryController(MemoryService memoryService) {
+		this.memoryService = memoryService;
 	}
 	
 	@GetMapping(value = "/memories")
-	public List<MemoryBean> getAllmemories() {
-		return memoryRepository.findAll();
+	public List<MemoryBean> getAllMemories() {
+		return memoryService.getAllMemories();
 	}
 	
 	@GetMapping("/memories/{id}")
 	MemoryBean getMemoryById(@PathVariable Long id) {
-		return memoryRepository.findById(id).get();
+		return memoryService.getMemoryById(id);
 	}
 	
 	@PostMapping("/memories")
-	MemoryBean createOrSavememory(@RequestBody MemoryBean memory) {
-		return memoryRepository.save(memory);
+	MemoryBean createOrSaveMemory(@RequestBody MemoryBean memory) {
+		return memoryService.createOrSaveMemory(memory);
 	}
 	
 	@PutMapping("/memories/{id}")
 	MemoryBean updatememory(@RequestBody MemoryBean updatedMemory, @PathVariable Long id) {
-		return memoryRepository.findById(id).map(memory -> {
-			memory.setTitle(updatedMemory.getTitle());
-			memory.setDescription(updatedMemory.getDescription());
-			memory.setCategory(updatedMemory.getCategory());
-			memory.setUser(updatedMemory.getUser());
-			
-			return memoryRepository.save(memory);
-		}).orElseGet(() -> {
-			updatedMemory.setId(id);
-			
-			return memoryRepository.save(updatedMemory);
-		});
+		return memoryService.updateMemory(updatedMemory, id);
 	}
 	
 	@DeleteMapping("/memories/{id}")
-	void deleteCatgory(@PathVariable Long id) {
-		memoryRepository.deleteById(id);
+	void deleteMemory(@PathVariable Long id) {
+		memoryService.deleteMemory(id);
 	}
 	
 }

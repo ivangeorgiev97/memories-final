@@ -34,7 +34,7 @@ public class UserService {
 	}
 
 	@PostConstruct
-	public void generateTestData() {
+	public void generateTestUserData() {
 		if (userRepository.count() == 0) {
 			UserBean user0 = new UserBean("admin", LoginController.hashPassword("admin"), "example@example.com");
 			UserBean user1 = new UserBean("user", LoginController.hashPassword("user"), "example1@example.com");
@@ -43,6 +43,22 @@ public class UserService {
 			userRepository.save(user1);
 			userRepository.save(user2);
 		}
+	}
+
+	public void removeUser(UserBean selectedUser) {
+		userRepository.delete(selectedUser);
+	}
+	
+	public Collection<UserBean> getByUsernameContaining(final String partOfUsername) {
+		if (null == partOfUsername || partOfUsername.isEmpty()) {
+			return findAll();
+		} else {
+			return getByUsernameContaining(partOfUsername);
+		}
+	}
+	
+	public void saveUser(final UserBean selectedUser) {
+		userRepository.save(selectedUser);
 	}
 
 }
