@@ -36,12 +36,12 @@ public class UserController {
 	}
 	
 	@PutMapping("/users/{id}")
-	UserBean updateusery(@RequestBody UserBean updatedUser, @PathVariable Long id) {
+	UserBean updateUser(@RequestBody UserBean updatedUser, @PathVariable Long id) {
 		return userService.updateUser(updatedUser, id);
 	}
 	
 	@DeleteMapping("/users/{id}")
-	void deleteCatgory(@PathVariable Long id) {
+	void deleteUser(@PathVariable Long id) {
 		userService.deleteUserById(id);
 	}
 }
