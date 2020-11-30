@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import uni.fmi.masters.bean.CategoryBean;
 import uni.fmi.masters.bean.UserBean;
 import uni.fmi.masters.controller.LoginController;
 import uni.fmi.masters.repository.UserRepository;
@@ -27,6 +28,10 @@ public class UserService {
 
 	public UserBean getByUsername(String username) {
 		return userRepository.getByUsername(username);
+	}
+	
+	public UserBean getUserById(Long id) {
+		return userRepository.findById(id).get();
 	}
 
 	public Collection<UserBean> findAll() {
@@ -49,6 +54,10 @@ public class UserService {
 		userRepository.delete(selectedUser);
 	}
 	
+	public void deleteUserById(Long id) {
+		userRepository.deleteById(id);
+	}
+	
 	public Collection<UserBean> getByUsernameContaining(final String partOfUsername) {
 		if (null == partOfUsername || partOfUsername.isEmpty()) {
 			return findAll();
@@ -59,6 +68,26 @@ public class UserService {
 	
 	public void saveUser(final UserBean selectedUser) {
 		userRepository.save(selectedUser);
+	}
+	
+	public UserBean createOrSaveUser(UserBean user) {
+		return userRepository.save(user);
+	}
+	
+	public UserBean updateUser(UserBean updatedUser, Long id) {
+		return userRepository.findById(id).map(user -> {
+			user.setUsername(updatedUser.getUsername());
+			user.setEmail(updatedUser.getEmail());
+			// This can be discussed
+			user.setPassword(updatedUser.getPassword());
+			// Maybe roles too
+			
+			return userRepository.save(user);
+		}).orElseGet(() -> {
+			updatedUser.setId(id);
+			
+			return userRepository.save(updatedUser);
+		});
 	}
 
 }
