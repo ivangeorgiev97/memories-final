@@ -19,8 +19,8 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping(value = "/useries")
-	public Collection<UserBean> getAlluseries() {
+	@GetMapping(value = "/users")
+	public Collection<UserBean> getAllUsers() {
 		return userService.findAll();
 	}
 	
