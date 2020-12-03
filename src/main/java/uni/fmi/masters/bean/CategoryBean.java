@@ -24,7 +24,7 @@ public class CategoryBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "name", length = 250, nullable = false)
+	@Column(name = "name", length = 250, nullable = false, unique = true)
 	private String name;
 	
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)

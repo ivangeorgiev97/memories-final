@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +14,7 @@
 </head>
 
 <body>
+	<%@ include file="header.jsp" %>
     <div id="main-container" class="container bg-light p-5">
         <div class="row">
             <div class="col-xs-12 col-md-4" style="display: none;" id="left">
@@ -98,12 +101,7 @@
                 </div>
             </div>
         </div>
-        <footer class="row mt-5 text-center font-weight-bold">
-            <p id="footer-text">
-                Иван Георгиев - 2001737001, спецаилност "Софтуерни технологии със специализация мобилни системи и
-                приложения"
-            </p>
-        </footer>
+        <%@ include file="footer.jsp" %>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"

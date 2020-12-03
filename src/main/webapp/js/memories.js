@@ -184,7 +184,7 @@ $(document).ready(function () {
     function initDisplay() {
         $("#left").fadeIn(800);
         $("#right").fadeIn(800);
-        $("#footer-text").fadeIn(2000);
+        // $("#footer-text").fadeIn(2000);
     }
 
     function createCard(data) {

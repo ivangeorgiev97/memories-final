@@ -1,6 +1,7 @@
 package uni.fmi.masters.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
@@ -11,15 +12,18 @@ import uni.fmi.masters.bean.CategoryBean;
 import uni.fmi.masters.bean.UserBean;
 import uni.fmi.masters.controller.LoginController;
 import uni.fmi.masters.repository.UserRepository;
+import uni.fmi.masters.repository.UserRoleRepository;
 
 @Service
 public class UserService {
 
 	private UserRepository userRepository;
+	private UserRoleRepository userRoleRepository;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
 		this.userRepository = userRepository;
+		this.userRoleRepository = userRoleRepository;
 	}
 
 	public UserBean getUserByUsernameAndPassword(String username, String password) {
@@ -71,6 +75,9 @@ public class UserService {
 	}
 	
 	public UserBean createOrSaveUser(UserBean user) {
+		user.setPassword(LoginController.hashPassword(user.getPassword()));
+		// user.setRoles(new HashSet<>(userRoleRepository.findAll()));
+		
 		return userRepository.save(user);
 	}
 	
@@ -79,8 +86,9 @@ public class UserService {
 			user.setUsername(updatedUser.getUsername());
 			user.setEmail(updatedUser.getEmail());
 			// This can be discussed
-			user.setPassword(updatedUser.getPassword());
+			user.setPassword(LoginController.hashPassword(updatedUser.getPassword()));
 			// Maybe roles too
+			// user.setRoles(new HashSet<>(userRoleRepository.findAll()));
 			
 			return userRepository.save(user);
 		}).orElseGet(() -> {

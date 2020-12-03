@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
+	<%@ include file="header.jsp" %>
 	<div class="container">
 		<div id="main-container" class="container bg-light p-5">
 			<div class="row">
@@ -64,11 +64,7 @@
 					</table>
 				</div>
 			</div>
-			<footer class="row mt-5 text-center font-weight-bold">
-				<p id="footer-text" style="display: none;">Иван Георгиев -
-					2001737001, спецаилност "Софтуерни технологии със специализация
-					мобилни системи и приложения"</p>
-			</footer>
+			<%@ include file="footer.jsp" %>
 		</div>
 	</div>
 
