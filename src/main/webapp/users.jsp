@@ -20,7 +20,7 @@
 						style="display: none;">
 						<span class="sr-only">Loading...</span>
 					</div>
-					<form id="add-form" action="register" method="POST">
+					<form id="add-form" name="add-form">
 			             <div class="form-group">
 			                 <label for="username">Потребител</label>
 			                 <input type="text" class="form-control" id="username" name="username" placeholder="Потребител" required minlength="4">
@@ -37,9 +37,9 @@
 			                 <label for="repeatPassword">Повторете паролата</label>
 			                 <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Повторете паролата" required minlength="4">
 			             </div>
-			             <input type="submit" id="submit-btn" class="btn btn-primary" value="Създай нов">
+			             <button type="button" id="submit-btn" class="btn btn-primary">Създай</button>
 			         </form>
-   					<form id="edit-form" action="update-user" method="PUT" style="display: none;">		
+   					<form id="edit-form" name="edit-form" style="display: none;">		
 			             <div class="form-group">
 			                 <label for="username">Потребител</label>
 			                 <input type="text" class="form-control" id="edit-username" name="edit-username" placeholder="Потребител" required minlength="4">
@@ -54,9 +54,9 @@
 			             </div>
 			             <div class="form-group">
 			                 <label for="repeatPassword">Повторете паролата</label>
-			                 <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Повторете паролата" required minlength="4">
+			                 <input type="password" class="form-control" id="edit-repeatPassword" name="edit-repeatPassword" placeholder="Повторете паролата" required minlength="4">
 			             </div>
-			             <input type="submit" id="edit-btn" class="btn btn-primary" value="Регистрирай се">
+			             <button type="button" class="btn btn-success" id="edit-btn">Обнови</button>
 			         </form>
 				</div>
 				<div class="col-xs-12 col-md-8" id="right">
@@ -103,4 +103,3 @@
     <script src="js/users.js"></script>
 </body>
 </html>
-\

@@ -24,8 +24,7 @@
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
-		</dependency>
+		    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -64,6 +63,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -86,7 +90,7 @@
 		</dependency>
 	</dependencies>
 	
-	<dependencyManagement>
+  <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>com.vaadin</groupId>
@@ -105,18 +109,18 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-maven-plugin</artifactId>
-            <version>${vaadin.version}</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>prepare-frontend</goal>
-                        <goal>build-frontend</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+	            <groupId>com.vaadin</groupId>
+	            <artifactId>vaadin-maven-plugin</artifactId>
+	            <version>${vaadin.version}</version>
+	            <executions>
+	                <execution>
+	                    <goals>
+	                        <goal>prepare-frontend</goal>
+	                        <goal>build-frontend</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+        	</plugin>
 		</plugins>
 	</build>
 

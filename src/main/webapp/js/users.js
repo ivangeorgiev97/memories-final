@@ -31,7 +31,13 @@ $(document).ready(function() {
 	$("#submit-btn").click(function() {
 		const username = $("#username").val();
 		const password = $("#password").val();
+		const repeatPassword = $("#repeatPassword").val();
 		const email = $("#email").val();
+		
+		if (password !== repeatPassword) {
+			alert('Паролите не са еднакви');
+			return;
+		}
 
 		if (username && password && email) addTableRow(username, password, email);
 	})
@@ -51,13 +57,19 @@ $(document).ready(function() {
 		$("#edit-form").show();
 	});
 	
-	$(document).on('click', '#edit-btn', function() {
+	$(document).on('click', '#edit-btn', function(event) {
 		const currentId = currentTableRow && currentTableRow.id ? currentTableRow.id : 0;
 		const username = $("#edit-username").val()
 		const password = $("#edit-password").val();
+		const editRepeatPassword = $("#edit-repeatPassword").val();
 		const email = $("#edit-email").val();
+		
+		if (password !== editRepeatPassword) {
+			alert('Паролите не са еднакви');
+			return;
+		}
 
-		if (name && currentId) editTableRow(currentId, username, password, email);
+		if (username && currentId && password && email) editTableRow(currentId, username, password, email);
 	});
 
 	$(document).on('click', '.remove-table-row', function() {
@@ -85,6 +97,7 @@ $(document).ready(function() {
 
 				$("#username").empty();
 				$("#password").empty();
+				$("#repeatPassword").empty();
 				$("#email").empty();
 
 				tableRow.fadeIn(1000);
