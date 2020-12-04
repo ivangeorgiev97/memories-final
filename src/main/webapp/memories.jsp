@@ -30,6 +30,12 @@
                         <label for="description">Описание:</label>
                         <textarea class="form-control" id="description" rows="6" minlength="4"></textarea>
                     </div>
+                    <div class="form-group">
+                    	<label for="categoryId">Категория:</label>
+                    	<select class="form-control custom-select" id="categoryId" name="categoryId" required>
+                    	
+                    	</select>
+                    </div>
                     <button id="submit-btn" type="button" class="btn btn-primary">Добави</button>
                 </form>
                 <form id="edit-form" name="edit-form" style="display: none;">
@@ -42,6 +48,12 @@
                             <label for="edit-description">Описание:</label>
                             <textarea class="form-control" id="edit-description" name="edit-description" rows="6" minlength="4"></textarea>
                         </div>
+                        <div class="form-group">
+	                    	<label for="edit-categoryId">Категория:</label>
+	                    	<select class="form-control custom-select" id="edit-categoryId" name="edit-categoryId" required>
+	                 
+	                    	</select>
+	                    </div>
                         <button id="edit-btn" type="button" class="btn btn-success">Обнови</button>
                     </form>
                 </form>
@@ -63,7 +75,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="from-id">ID филтриране (без ajax заявка)</label>
+                            <label for="from-id">ID филтриране (без ajax)</label>
                             <select class="form-control custom-select" id="from-id">
                                 <option value="" selected disabled hidden>Моля изберете</option>
                                 <option value="1">1</option>
@@ -74,10 +86,9 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="from-id">Филтриране по категория</label>
-                            <select class="form-control custom-select" id="categoryId">
+                            <label for="from-id">Филтриране по категория</label>		
+							<select class="form-control custom-select" id="categoryIdFilter">
                                 <option value="" selected disabled hidden>Моля изберете</option>
-                                <!-- TODO - Add categories here -->
                             </select>
                         </div>
                     </div>
@@ -93,7 +104,8 @@
                         <div class="card-body">
                             <h5 class="card-title">Заглавие</h5>
                             <p class="card-text">Описание</p>
-                            <span class="d-block small card-created-at">Създадено на:</span> 
+                            <p class="card-category">Категория</p>
+                            <p class="card-user">Потребител</p>
                             <button type="button" class="btn btn-warning edit-card">Промени</button>
                             <button type="button" class="btn btn-danger remove-card">Изтрий</button>
                         </div>

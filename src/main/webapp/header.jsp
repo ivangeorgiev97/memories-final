@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand" href="#">Memories</a>
@@ -19,12 +21,14 @@
 				<li class="nav-item"><a class="nav-link" href="/users.jsp">Users</a>
 				</li>
 			</ul>
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link" href="/index.html">Login</a>
-				</li>
-				<li class="nav-item"><a class="nav-link"
-					href="/registration.html">Registration</a></li>
-			</ul>
+			<c:if test="${pageContext.request.userPrincipal.name == null}">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href="/index.html">Login</a>
+					</li>
+					<li class="nav-item"><a class="nav-link"
+						href="/registration.html">Registration</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 </header>

@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import uni.fmi.masters.bean.CategoryBean;
 import uni.fmi.masters.bean.UserBean;
 import uni.fmi.masters.controller.LoginController;
 import uni.fmi.masters.repository.UserRepository;

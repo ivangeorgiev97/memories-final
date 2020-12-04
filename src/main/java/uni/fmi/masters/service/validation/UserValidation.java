@@ -31,15 +31,15 @@ public class UserValidation implements Validator {
 		// Username validaiton
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
 		if (currentUser.getUsername().length() < 4 || currentUser.getUsername().length() > 40) {
-			errors.rejectValue("username", "Size.userForm.username");
+			errors.rejectValue("username", "Size.mainUserForm.username");
 		}
 		if(userService.getByUsername(currentUser.getUsername()) != null) {
-			errors.rejectValue("username", "Duplicate.userForm.username");
+			errors.rejectValue("username", "Duplicate.mainUserForm.username");
 		}
 		
 		// Password validation
 		if (currentUser.getPassword().length() < 4 || currentUser.getPassword().length() > 32) {
-			errors.rejectValue("password", "Size.userForm.password");
+			errors.rejectValue("password", "Size.mainUserForm.password");
 		}
 		// Password confirm too
 	}

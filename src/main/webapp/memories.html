@@ -21,11 +21,17 @@
                 <form id="add-form" name="add-form">
                     <div class="form-group">
                         <label for="title">Заглавие:</label>
-                        <input type="text" class="form-control" id="title" placeholder="Заглавие" minlength="2" />
+                        <input type="text" class="form-control" id="title" placeholder="Заглавие" minlength="2" required />
                     </div>
                     <div class="form-group">
                         <label for="description">Описание:</label>
-                        <textarea class="form-control" id="description" rows="6" minlength="4"></textarea>
+                        <textarea class="form-control" id="description" rows="6" minlength="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                    	<label for="categoryId">Категория:</label>
+                    	<select class="form-control" id="categoryId" name="categoryId" required>
+                    	
+                    	</select>
                     </div>
                     <button id="submit-btn" type="button" class="btn btn-primary">Добави</button>
                 </form>
@@ -33,12 +39,18 @@
                     <form id="addForm">
                         <div class="form-group">
                             <label for="edit-title">Заглавие:</label>
-                            <input type="text" class="form-control" id="edit-title" name="edit-title" placeholder="Заглавие" minlength="2" />
+                            <input type="text" class="form-control" id="edit-title" name="edit-title" placeholder="Заглавие" minlength="2" required />
                         </div>
                         <div class="form-group">
                             <label for="edit-description">Описание:</label>
-                            <textarea class="form-control" id="edit-description" name="edit-description" rows="6" minlength="4"></textarea>
+                            <textarea class="form-control" id="edit-description" name="edit-description" rows="6" minlength="4" required></textarea>
                         </div>
+                        <div class="form-group">
+	                    	<label for="edit-categoryId">Категория:</label>
+	                    	<select class="form-control" id="edit-categoryId" name="edit-categoryId" required>
+	                 
+	                    	</select>
+	                    </div>
                         <button id="edit-btn" type="button" class="btn btn-success">Обнови</button>
                     </form>
                 </form>
@@ -72,7 +84,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="from-id">Филтриране по категория</label>
-                            <select class="form-control custom-select" id="categoryId">
+                            <select class="form-control custom-select" id="categoryIdFilter">
                                 <option value="" selected disabled hidden>Моля изберете</option>
                                 <!-- TODO - Add categories here -->
                             </select>

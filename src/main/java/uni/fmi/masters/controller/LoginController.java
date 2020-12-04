@@ -5,11 +5,13 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,25 +21,40 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import uni.fmi.masters.WebSecurityConfig;
 import uni.fmi.masters.bean.UserBean;
 import uni.fmi.masters.repository.UserRepository;
+import uni.fmi.masters.service.UserSecurityService;
+import uni.fmi.masters.service.validation.UserValidation;
 
 @RestController
 public class LoginController {
 
 	private UserRepository userRepository;
 	private WebSecurityConfig webSecurityConfig;
+	private UserValidation userValidation;
+	private UserSecurityService userSecurityService;
 	
-	public LoginController(UserRepository userRepository, WebSecurityConfig webSecurityConfig) {
+	@Autowired
+	public LoginController(UserRepository userRepository, WebSecurityConfig webSecurityConfig, UserValidation userValidation, UserSecurityService userSecurityService) {
 		this.userRepository = userRepository;
 		this.webSecurityConfig = webSecurityConfig;
+		this.userValidation = userValidation;
+		this.userSecurityService = userSecurityService;
 	}
 	
+	// old way UserBean register
 	@PostMapping(path = "/register")
 	public UserBean register(@RequestParam(value = "email")String email, @RequestParam(value = "username") String username,
 			@RequestParam(value="password")String password, @RequestParam(value="repeatPassword")String repeatPassword) {
+		// Validation coming from userValidation can be placed here
 		if(password.equals(repeatPassword)) {
 			UserBean user = new UserBean(username, hashPassword(password), email);
 			
+			// old way
+			// return userRepository.saveAndFlush(user);
 			return userRepository.saveAndFlush(user);
+			
+			// userSecurityService.loginAutomatically(username, hashPassword(password));
+			
+			// return "index.html";
 		} else {
 			return null;
 		}
@@ -69,8 +86,9 @@ public class LoginController {
 					http.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 				}
 				
-				return "memories.html";
-			
+				// TODO - Add also logout functionality
+				
+				return "memories.jsp";
 			} catch (UsernameNotFoundException e) {
 				e.printStackTrace();
 			} catch (Exception e) {

@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 import javax.persistence.GenerationType;
@@ -22,6 +24,7 @@ import javax.persistence.GenerationType;
 @Entity
 @Table(name = "user")
 @Data
+@JsonIgnoreProperties({"memories"})
 public class UserBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -1,6 +1,9 @@
 $(document).ready(function () {
     // API Url
     const apiUrl = 'http://localhost:8080/memories';
+    
+    // Category API Url
+    const categoryApiUrl = 'http://localhost:8080/categories';
 
     let darkMode = false;
     let currentResult = [];
@@ -10,6 +13,7 @@ $(document).ready(function () {
     let fromIdVal;
 
     // First api call 
+    getAllCategories();
     getAll(1, 'id', true);
 
     $("#dark-cards").click(function () {
@@ -49,17 +53,18 @@ $(document).ready(function () {
     $("#submit-btn").click(function () {
         const title = $("#title").val();
         const description = $("#description").val();
+        const categoryId = $("select[name='categoryId']").val();
 
-        if (title && description) addCard(title, description);
+        if (title && description && categoryId) addCard(title, description, categoryId);
     })
 
     $(document).on('click', '#edit-btn', function () {
         const currentId = currentCard && currentCard.id ? currentCard.id : 0;
         const title = $("#edit-title").val();
         const description = $("#edit-description").val();
+		const categoryId = $("select[name='edit-categoryId']").val();
 
-
-        if (title && description && currentId) editCard(currentId, title, description);
+        if (title && description && currentId && categoryId) editCard(currentId, title, description, categoryId);
     });
 
     $(document).on('click', '.remove-card', function () {
@@ -78,32 +83,55 @@ $(document).ready(function () {
 
         $("#edit-title").val(currentCard.title);
         $("#edit-description").val(currentCard.description);
+        $("select[name='edit-categoryId']").val(currentCard.category.id);
 
         $("#loading-spinner").hide();
         $("#edit-form").show();
     });
-
-    function getAll(fromId = 1, sortBy, isFirst) {
-        setTimeout(function () {
+    
+    function getAllCategories() {
+    	setTimeout(function () {
             $.ajax({
                 method: "GET",
-                url: `${apiUrl}/getAll/${fromId}/${sortBy}`,
+                url: `${categoryApiUrl}`,
                 dataType: "json"
             }).done(function (data) {
-                currentResult = [...data];
-
-                renderData(data, isFirst);
-            }).catch(function () {
-                onApiError();
+            	let optionsHtml = '';
+                for (let i = 0; i < data.length; i++) {
+                	optionsHtml += `<option value="${data[i].id}">${data[i].name}</option>`
+                }
+                $("#categoryId").html(optionsHtml);
+                $("#edit-categoryId").html(optionsHtml);
+                $("#categoryIdFilter").html(optionsHtml);
+            }).catch(function (err) {
+                onApiError(err);
             });
         }, 300)
     }
 
-    function addCard(title, description) {
+    function getAll(fromId = 1, sortBy, isFirst) {
+    	// TODO - Use sortBY and fromId
         setTimeout(function () {
-            $.post(`${apiUrl}/create`, {
+            $.ajax({
+                method: "GET",
+                url: `${apiUrl}`,
+                dataType: "json"
+            }).done(function (data) { 
+                currentResult = [...data];
+
+                renderData(data, isFirst);
+            }).catch(function (err) {
+                onApiError(err);
+            });
+        }, 300)
+    }
+
+    function addCard(title, description, categoryId) {
+        setTimeout(function () {
+            $.post(`${apiUrl}`, {
                 title: title,
-                description: description
+                description: description,
+                categoryId: categoryId
             }, function (data) {
                 currentResult.push(data);
 
@@ -112,10 +140,11 @@ $(document).ready(function () {
 
                 $("#title").empty();
                 $("#description").empty();
+                // maybe reset select too
 
                 card.fadeIn(1000);
-            }).catch(function () {
-                onApiError();
+            }).catch(function (err) {
+                onApiError(err);
             })
         }, 500)
     }
@@ -128,35 +157,38 @@ $(document).ready(function () {
                 success: () => {
                     $(`#card-${id}`).fadeOut(1000);
                 }
-            }).catch(function () {
-                onApiError();
+            }).catch(function (err) {
+                onApiError(err);
             });
         }, 300)
     }
 
-    function editCard(id, title, description) {
+    function editCard(id, title, description, categoryId) {
         const data = {
             id: id,
             title: title,
-            description: description
+            description: description,
+            categoryId: categoryId
         }
 
-        setTimeout(function () {
+        setTimeout(function (data) {
             $.ajax({
                 type: 'PUT',
-                url: `${apiUrl}/update/${id}`,
+                url: `${apiUrl}/${id}`,
                 contentType: 'application/json',
                 data: JSON.stringify(data)
-            }).done(function () {
+            }).done(function (updatedData) {
                 $("#edit-form").hide();
                 $("#add-form").show();
                 if (currentCard) {
                     const editedCard = $(`#card-${currentCard.id}`);
-                    editedCard.find('h5').html(`<span class="title-id">${currentCard.id}</span> - <span class="title-name">${title}</span>`);
-                    editedCard.find('p').text(`${description}`);
+                    editedCard.find('h5').html(`<span class="title-id">${updatedData.id}</span> - <span class="title-name">${updatedData.title}</span>`);
+                    editedCard.find('.card-text').text(`${updatedData.description}`);
+                    editedCard.find('.card-category').text(`Категория: ${updatedData.category.name}`);
+                    editedCard.find('.card-user').text(`Потребител: ${updatedData.user.username}`);
                 }
-            }).catch(function () {
-                onApiError();
+            }).catch(function (err) {
+                onApiError(err);
                 $("#edit-form").hide();
                 $("#add-form").show();
             });
@@ -177,7 +209,8 @@ $(document).ready(function () {
         $("#cards-list").fadeIn(1500);
     }
 
-    function onApiError() {
+    function onApiError(err) {
+    	console.log(err);
         alert('Проблем с API call-а. Моля проверете дали има работещо API и дали apiUrl-ът е правилен');
     }
 
@@ -195,8 +228,10 @@ $(document).ready(function () {
         clonedCard.find('.remove-card').data('id', `remove-${data.id}`);
         clonedCard.find('.edit-card').data('id', `edit-${data.id}`);
         clonedCard.find('h5').html(`<span class="title-id">${data.id}</span> - <span class="title-name">${data.title}</span>`);
-        clonedCard.find('p').text(`${data.description}`);
-        clonedCard.find('.card-created-at').text(`${data.created_at}`);
+        clonedCard.find('.card-text').text(`${data.description}`);
+        clonedCard.find('.card-category').text(`Категория: ${data.category.name}`);
+        clonedCard.find('.card-user').text(`Потребител: ${data.user.username}`);
+        // clonedCard.find('.card-created-at').text(`${data.created_at}`);
 
         return clonedCard;
     }
