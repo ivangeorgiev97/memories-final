@@ -62,7 +62,7 @@
                 <h3>Вашите спомени:</h3>
 
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="form-group">
                             <label for="sort-by">Сортирай по (с ajax заявка)</label>
                             <select class="form-control custom-select" id="sort-by">
@@ -73,7 +73,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="form-group">
                             <label for="from-id">ID филтриране (без ajax)</label>
                             <select class="form-control custom-select" id="from-id">
@@ -84,10 +84,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                </div>
+                
+                <div class="row mt-1">
+                    <div class="col-6">
                         <div class="form-group">
-                            <label for="from-id">Филтриране по категория</label>		
+                            <label for="categoryIdFilter">Филтриране по категория</label>		
 							<select class="form-control custom-select" id="categoryIdFilter">
+                                <option value="" selected disabled hidden>Моля изберете</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="userIdFilter">Филтриране по потребител</label>		
+							<select class="form-control custom-select" id="userIdFilter">
                                 <option value="" selected disabled hidden>Моля изберете</option>
                             </select>
                         </div>
@@ -106,8 +117,10 @@
                             <p class="card-text">Описание</p>
                             <p class="card-category">Категория</p>
                             <p class="card-user">Потребител</p>
-                            <button type="button" class="btn btn-warning edit-card">Промени</button>
-                            <button type="button" class="btn btn-danger remove-card">Изтрий</button>
+                            <p class="card-actions">
+	                            <button type="button" class="btn btn-warning edit-card">Промени</button>
+	                            <button type="button" class="btn btn-danger remove-card">Изтрий</button>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -116,11 +129,6 @@
         <%@ include file="footer.jsp" %>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
     <script src="js/memories.js"></script>
 </body>
 

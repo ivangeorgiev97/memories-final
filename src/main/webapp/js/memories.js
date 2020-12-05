@@ -4,6 +4,9 @@ $(document).ready(function () {
     
     // Category API Url
     const categoryApiUrl = 'http://localhost:8080/categories';
+    
+    // Users API Url
+    const userApiUrl = 'http://localhost:8080/users';
 
     let darkMode = false;
     let currentResult = [];
@@ -11,9 +14,13 @@ $(document).ready(function () {
     let tempId;
     let sortByVal;
     let fromIdVal;
+    let currentUser;
+    
+    getCurrentUser();
 
     // First api call 
     getAllCategories();
+    getAllUsers();
     getAll(1, 'id', true);
 
     $("#dark-cards").click(function () {
@@ -88,6 +95,26 @@ $(document).ready(function () {
         $("#loading-spinner").hide();
         $("#edit-form").show();
     });
+
+    function getCurrentUser() {
+    	$.ajax({
+    		url: "/getLoggedInUser",
+    		method: "GET",
+    		complete: function(data) {
+    			switch (data.status) {
+    				case 200:
+    				currentUser = data.responseJSON;
+    				break;
+    				
+    				case 401:
+    				window.location.href="index.html";
+    				break;
+    			}
+    		}, fail: function() {
+    			window.location.href="index.html";
+    		}
+    	});
+    }
     
     function getAllCategories() {
     	setTimeout(function () {
@@ -97,12 +124,32 @@ $(document).ready(function () {
                 dataType: "json"
             }).done(function (data) {
             	let optionsHtml = '';
+            	optionsHtml += '<option value="" selected disabled hidden>Моля изберете</option>';
                 for (let i = 0; i < data.length; i++) {
                 	optionsHtml += `<option value="${data[i].id}">${data[i].name}</option>`
                 }
                 $("#categoryId").html(optionsHtml);
                 $("#edit-categoryId").html(optionsHtml);
                 $("#categoryIdFilter").html(optionsHtml);
+            }).catch(function (err) {
+                onApiError(err);
+            });
+        }, 300)
+    }
+    
+    function getAllUsers() {
+    	setTimeout(function () {
+            $.ajax({
+                method: "GET",
+                url: `${userApiUrl}`,
+                dataType: "json"
+            }).done(function (data) {
+            	let optionsHtml = '';
+            	optionsHtml += '<option value="" selected disabled hidden>Моля изберете</option>';
+                for (let i = 0; i < data.length; i++) {
+                	optionsHtml += `<option value="${data[i].id}">${data[i].username}</option>`
+                }
+                $("#userIdFilter").html(optionsHtml);
             }).catch(function (err) {
                 onApiError(err);
             });
@@ -225,13 +272,18 @@ $(document).ready(function () {
 
         clonedCard.removeAttr('id');
         clonedCard.attr('id', `card-${data.id}`)
-        clonedCard.find('.remove-card').data('id', `remove-${data.id}`);
-        clonedCard.find('.edit-card').data('id', `edit-${data.id}`);
         clonedCard.find('h5').html(`<span class="title-id">${data.id}</span> - <span class="title-name">${data.title}</span>`);
         clonedCard.find('.card-text').text(`${data.description}`);
         clonedCard.find('.card-category').text(`Категория: ${data.category.name}`);
         clonedCard.find('.card-user').text(`Потребител: ${data.user.username}`);
-        // clonedCard.find('.card-created-at').text(`${data.created_at}`);
+        // clonedCard.find('.card-created-at').text(`${data.created_at}`);        
+		clonedCard.find('.card-actions').empty();
+        if (currentUser && currentUser === data.user.id) {
+        	clonedCard.find('.card-actions').html(`
+        		<button type="button" data-id="remove-${data.id}" class="btn btn-warning edit-card">Промени</button>
+            	<button type="button" data-id="edit-${data.id}" class="btn btn-danger remove-card">Изтрий</button>	
+        	`);
+        }
 
         return clonedCard;
     }

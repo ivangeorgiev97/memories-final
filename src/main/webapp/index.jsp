@@ -28,8 +28,6 @@
 	        </div>
 	        <input type="submit" class="btn btn-primary" value="Влез" />
 	    </form>
-	    
-	    <%@ include file="footer.jsp" %>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"

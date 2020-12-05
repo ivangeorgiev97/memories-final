@@ -15,20 +15,27 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<!-- 	      <li class="nav-item active"> -->
-				<li class="nav-item"><a class="nav-link" href="/memories.jsp">Memories</a></li>
+				<li class="nav-item"><a class="nav-link" href="/memories.jsp">Спомени</a></li>
 				<!-- <span class="sr-only">(current)</span></a> -->
-				<li class="nav-item"><a class="nav-link" href="/categories.jsp">Categories</a></li>
-				<li class="nav-item"><a class="nav-link" href="/users.jsp">Users</a>
+				<li class="nav-item"><a class="nav-link" href="/categories.jsp">Категории</a></li>
+				<li class="nav-item"><a class="nav-link" href="/users.jsp">Потребители</a>
 				</li>
 			</ul>
-			<c:if test="${pageContext.request.userPrincipal.name == null}">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href="/index.html">Login</a>
-					</li>
-					<li class="nav-item"><a class="nav-link"
-						href="/registration.html">Registration</a></li>
-				</ul>
-			</c:if>
+			<c:choose>
+				<c:when test="${pageContext.request.userPrincipal.name == null}">
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link" href="/index.html">Вход</a>
+						</li>
+						<li class="nav-item"><a class="nav-link"
+							href="/registration.html">Регистрация</a></li>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					<ul class="navbar-nav">
+						<li class="nav-item"><btn id="logoutBtn" class="btn btn-link">Изход</btn></li>
+					</ul>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</nav>
 </header>
