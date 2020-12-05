@@ -1,11 +1,11 @@
 package uni.fmi.masters.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,17 +51,29 @@ public class MemoryController {
 		return memoryService.createOrSaveMemory(title, description, categoryId, user);
 	}
 	
-	@PutMapping("/memories/{id}")
-	MemoryBean updatememory(@RequestParam(value = "title")String title, @RequestParam(value = "description") String description,
-			@RequestParam(value="categoryId")Integer categoryId, @PathVariable Long id, HttpSession session) {
+	@PutMapping("/memories/{id}/{categoryId}")
+	MemoryBean updateMemory(@RequestBody MemoryBean memory, @PathVariable Long id, @PathVariable Integer categoryId, HttpSession session) {
 		UserBean user = (UserBean) session.getAttribute("user");
 		
-		return memoryService.updateMemory(title, description, id, categoryId, user);
+		return memoryService.updateMemory(memory, id, categoryId, user);
 	}
 	
 	@DeleteMapping("/memories/{id}")
-	void deleteMemory(@PathVariable Long id) {
-		memoryService.deleteMemory(id);
+	ResponseEntity<Boolean> deleteMemory(@PathVariable Long id, HttpSession session) {
+		// this might go in separate function
+		UserBean user = (UserBean) session.getAttribute("user");
+		
+		if (user != null) {
+			boolean memoryDeleted = memoryService.deleteMemory(id, user);
+			
+			if (memoryDeleted) {
+				return new ResponseEntity<>(true, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+			}
+		}
+		
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 	
 }

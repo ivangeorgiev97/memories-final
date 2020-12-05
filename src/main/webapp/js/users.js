@@ -4,28 +4,11 @@ $(document).ready(function() {
 
 	let currentResult = [];
 	let currentTableRow;
+	let currentLoggedInUser;
+	
+	getCurrentLoggedInUser();
 	
 	getAll();
-	
-	$('#loginForm').submit(function(e) {
-		e.preventDefault();
-
-		$.ajax({
-			url: "login",
-			method: "POST",
-			data: {
-				username: $('#username').val(),
-				password: $('#password').val()
-			},
-			success: function(data) {
-				window.location.replace(data);
-			},
-			fail: function() {
-				window.location.href = "error.html"
-			}
-		});
-
-	});
 	
 	// or form submit with serialize function called
 	$("#submit-btn").click(function() {
@@ -77,6 +60,26 @@ $(document).ready(function() {
 
 		if (id) deleteTableRow(id);
 	});
+	
+    function getCurrentLoggedInUser() {
+    	$.ajax({
+    		url: "/getLoggedInUser",
+    		method: "GET",
+    		complete: function(data) {
+    			switch (data.status) {
+    				case 200:
+    				currentLoggedInUser = data.responseJSON;
+    				break;
+    				
+    				case 401:
+    				console.log('User still not logged in')
+    				break;
+    			}
+    		}, fail: function() {
+    			window.location.href="index.html";
+    		}
+    	});
+    }
 	
 	function addTableRow(username, password, email) {
 		$.ajax({
@@ -180,11 +183,16 @@ $(document).ready(function() {
 
 		clonedTableRow.removeAttr('id');
 		clonedTableRow.attr('id', `tr-${data.id}`)
-		clonedTableRow.find('.remove-table-row').data('id', `remove-${data.id}`);
-		clonedTableRow.find('.edit-table-row').data('id', `edit-${data.id}`);
 		clonedTableRow.find('.user-id').text(`${data.id}`);
 		clonedTableRow.find('.user-username').text(`${data.username}`);
 		clonedTableRow.find('.user-email').text(`${data.email}`);
+		
+		clonedTableRow.find('.user-actions').empty();
+		if (currentLoggedInUser && currentLoggedInUser === data.id) {
+			clonedTableRow.find('.user-actions').html(`
+				<button class="btn btn-warning edit-table-row" data-id="edit-${data.id}">Редактирай</button><button class="btn btn-danger remove-table-row" data-id="remove-${data.id}">Изтрий</button>
+			`);
+		}
 
 		return clonedTableRow;
 	}

@@ -2,6 +2,7 @@ package uni.fmi.masters.service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -44,9 +45,9 @@ public class UserService {
 	@PostConstruct
 	public void generateTestUserData() {
 		if (userRepository.count() == 0) {
-			UserBean user0 = new UserBean("admin", LoginController.hashPassword("admin"), "example@example.com");
-			UserBean user1 = new UserBean("user", LoginController.hashPassword("user"), "example1@example.com");
-			UserBean user2 = new UserBean("test", LoginController.hashPassword("test"), "example2@example.com");
+			UserBean user0 = new UserBean("firstuser", LoginController.hashPassword("firstuser"), "example@example.com");
+			UserBean user1 = new UserBean("seconduser", LoginController.hashPassword("seconduser"), "example1@example.com");
+			UserBean user2 = new UserBean("thirduser", LoginController.hashPassword("thirduser"), "example2@example.com");
 			userRepository.save(user0);
 			userRepository.save(user1);
 			userRepository.save(user2);
@@ -57,8 +58,24 @@ public class UserService {
 		userRepository.delete(selectedUser);
 	}
 	
-	public void deleteUserById(Long id) {
-		userRepository.deleteById(id);
+	public boolean deleteUserById(Long id, UserBean loggedInUser) {
+		Optional<UserBean> optionalUser = userRepository.findById(id);
+		
+		if (optionalUser.isPresent()) {
+			
+			UserBean user = optionalUser.get();
+			
+			if (user.getId() == loggedInUser.getId()) {
+				userRepository.deleteById(id);
+				
+				return true;
+			} else {
+				return false;
+			}
+		
+		}
+		
+		return false;
 	}
 	
 	public Collection<UserBean> getByUsernameContaining(final String partOfUsername) {
@@ -80,21 +97,29 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public UserBean updateUser(UserBean updatedUser, Long id) {
-		return userRepository.findById(id).map(user -> {
-			user.setUsername(updatedUser.getUsername());
-			user.setEmail(updatedUser.getEmail());
-			// This can be discussed
-			user.setPassword(LoginController.hashPassword(updatedUser.getPassword()));
-			// Maybe roles too
-			// user.setRoles(new HashSet<>(userRoleRepository.findAll()));
-			
-			return userRepository.save(user);
-		}).orElseGet(() -> {
-			updatedUser.setId(id);
-			
-			return userRepository.save(updatedUser);
-		});
+	public UserBean updateUser(UserBean updatedUser, Long id, UserBean loggedInUser) {
+		if (loggedInUser != null) {
+			return userRepository.findById(id).map(user -> {
+				if (user.getId() == loggedInUser.getId()) {
+					user.setUsername(updatedUser.getUsername());
+					user.setEmail(updatedUser.getEmail());
+					// This can be discussed
+					user.setPassword(LoginController.hashPassword(updatedUser.getPassword()));
+					// Maybe roles too
+					// user.setRoles(new HashSet<>(userRoleRepository.findAll()));
+					
+					return userRepository.save(user);
+				}
+				
+				return null;
+			}).orElseGet(() -> {
+				updatedUser.setId(id);
+				
+				return userRepository.save(updatedUser);
+			});
+		}
+		
+		return null;
 	}
 
 }

@@ -81,7 +81,7 @@
 								<td class="user-id">Id here</td>
 								<td class="user-username">Username here</td>
 								<td class="user-email">Email here</td>
-								<td><button class="btn btn-warning edit-table-row">Редактирай</button><button class="btn btn-danger remove-table-row">Изтрий</button></td>
+								<td class="user-actions"><button class="btn btn-warning edit-table-row">Редактирай</button><button class="btn btn-danger remove-table-row">Изтрий</button></td>
 							</tr>
 						</tbody>
 					</table>

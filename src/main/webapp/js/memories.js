@@ -199,7 +199,7 @@ $(document).ready(function () {
     function deleteCard(id) {
         setTimeout(function () {
             $.ajax({
-                url: `${apiUrl}/delete/${id}`,
+                url: `${apiUrl}/${id}`,
                 type: 'DELETE',
                 success: () => {
                     $(`#card-${id}`).fadeOut(1000);
@@ -217,29 +217,27 @@ $(document).ready(function () {
             description: description,
             categoryId: categoryId
         }
-
-        setTimeout(function (data) {
-            $.ajax({
-                type: 'PUT',
-                url: `${apiUrl}/${id}`,
-                contentType: 'application/json',
-                data: JSON.stringify(data)
-            }).done(function (updatedData) {
-                $("#edit-form").hide();
-                $("#add-form").show();
-                if (currentCard) {
-                    const editedCard = $(`#card-${currentCard.id}`);
-                    editedCard.find('h5').html(`<span class="title-id">${updatedData.id}</span> - <span class="title-name">${updatedData.title}</span>`);
-                    editedCard.find('.card-text').text(`${updatedData.description}`);
-                    editedCard.find('.card-category').text(`Категория: ${updatedData.category.name}`);
-                    editedCard.find('.card-user').text(`Потребител: ${updatedData.user.username}`);
-                }
-            }).catch(function (err) {
-                onApiError(err);
-                $("#edit-form").hide();
-                $("#add-form").show();
-            });
-        }, 500)
+       
+        $.ajax({
+            type: 'PUT',
+            url: `${apiUrl}/${id}/${categoryId}`,
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+        }).done(function (updatedData) {
+            $("#edit-form").hide();
+            $("#add-form").show();
+            if (currentCard) {
+                const editedCard = $(`#card-${currentCard.id}`);
+                editedCard.find('h5').html(`<span class="title-id">${updatedData.id}</span> - <span class="title-name">${updatedData.title}</span>`);
+                editedCard.find('.card-text').text(`${updatedData.description}`);
+                editedCard.find('.card-category').text(`Категория: ${updatedData.category.name}`);
+                editedCard.find('.card-user').text(`Потребител: ${updatedData.user.username}`);
+            }
+        }).catch(function (err) {
+            onApiError(err);
+            $("#edit-form").hide();
+            $("#add-form").show();
+        });
     }
 
     function renderData(data, isFirst) {

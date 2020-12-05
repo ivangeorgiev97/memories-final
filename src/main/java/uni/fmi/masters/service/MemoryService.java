@@ -1,6 +1,7 @@
 package uni.fmi.masters.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -40,40 +41,61 @@ public class MemoryService {
 				memory.setCategory(memoryCategory);
 				memory.setUser(user);
 				
-				return memoryRepository.save(memory);
+				return memoryRepository.saveAndFlush(memory);
 			}
 		}
 
 		return null;
 	}
 	
-	public MemoryBean updateMemory(String title, String description, Long id, Integer categoryId, UserBean user) {
+	public MemoryBean updateMemory(MemoryBean updatedMemory, Long id, Integer categoryId, UserBean user) {
 		if (user != null) {
 			return memoryRepository.findById(id).map(memory -> {
 				CategoryBean memoryCategory = categoryRepository.findById(categoryId).get();
 				
-				if (memoryCategory != null) {
-					memory.setTitle(title);
-					memory.setDescription(description);
-					memory.setCategory(memoryCategory);
-					memory.setUser(user);
+				// this could be refactored
+				Optional<MemoryBean> optionalMemory = memoryRepository.findById(id);
+				
+				if (memoryCategory != null && optionalMemory.isPresent()) {
+					MemoryBean finalMemory = optionalMemory.get();
 					
-					return memoryRepository.save(memory);
+					if (finalMemory.getUser().getId() == user.getId()) {
+						memory.setTitle(updatedMemory.getTitle());
+						memory.setDescription(updatedMemory.getDescription());
+						memory.setCategory(memoryCategory);
+						memory.setUser(user);
+						
+						return memoryRepository.save(memory);
+					}
+					
+					return null;
 				}
 				
 				return null;
 			}).orElseGet(() -> {
-				MemoryBean updatedMemory = new MemoryBean();
-				updatedMemory.setId(id);
+				MemoryBean newMemory = new MemoryBean();
+				newMemory.setId(id);
 				
-				return memoryRepository.save(updatedMemory);
+				return memoryRepository.save(newMemory);
 			});
 		}
 		
 		return null;
 	}
 	
-	public void deleteMemory(Long id) {
-		memoryRepository.deleteById(id);
+	public boolean deleteMemory(Long id, UserBean user) {
+		Optional<MemoryBean> optionalMemory = memoryRepository.findById(id);
+		
+		if (optionalMemory.isPresent()) {
+			MemoryBean memory = optionalMemory.get();
+			
+			if (memory.getUser().getId() == user.getId()) {
+				memoryRepository.deleteById(id);
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
