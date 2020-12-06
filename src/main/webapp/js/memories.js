@@ -14,6 +14,8 @@ $(document).ready(function () {
     let tempId;
     let sortByVal;
     let fromIdVal;
+    let categoryIdVal;
+    let userIdVal;
     let currentUser;
     
     getCurrentUser();
@@ -21,7 +23,7 @@ $(document).ready(function () {
     // First api call 
     getAllCategories();
     getAllUsers();
-    getAll(1, 'id', true);
+    getAll('id', 0, 0, true);
 
     $("#dark-cards").click(function () {
         darkMode = !darkMode;
@@ -32,20 +34,24 @@ $(document).ready(function () {
 
     $("#sort-by").change(function () {
         sortByVal = $(this).val();
-        fromIdVal = $("#from-id").val();
 
-        if (!fromIdVal) fromIdVal = 1;
+        if (sortByVal) sortAndFilterCategories();
+    })
+    
+    $("#categoryIdFilter").change(function () {
+        categoryIdVal = $(this).val();
 
-        if (sortByVal) getAll(fromIdVal, sortByVal, false);
+        if (categoryIdVal) sortAndFilterCategories();
+    })
+    
+    $("#userIdFilter").change(function () {
+        userIdVal = $(this).val();
+
+        if (userIdVal) sortAndFilterCategories();
     })
 
     $("#from-id").change(function () {
         fromIdVal = $(this).val();
-        sortByVal = $("#sort-by").val();
-
-        if (fromIdVal && (currentResult.length === 0 || (tempId && tempId > fromIdVal))) {
-            getAll(fromIdVal, 'id', false);
-        }
 
         if (fromIdVal) {
             const filteredResult = currentResult.filter(el => el.id >= fromIdVal)
@@ -137,6 +143,24 @@ $(document).ready(function () {
         }, 300)
     }
     
+    function sortAndFilterCategories() {
+    	if (sortByVal && categoryIdVal && userIdVal) {
+    		getAll(sortByVal, categoryIdVal, userIdVal, false);
+    	} else if (sortByVal && categoryIdVal) {
+    		getAll(sortByVal, categoryIdVal, 0, false);
+    	} else if (categoryIdVal && userIdVal) {
+    		getAll("id", categoryIdVal, userIdVal, false);
+    	} else if (sortByVal && userIdVal) {
+    		getAll(sortByVal, 0, userIdVal, false);
+    	} else if (sortByVal) {
+    		getAll(sortByVal, 0, 0, false);
+    	} else if (userIdVal) {
+    		getAll("id", 0, userIdVal, false);
+    	} else if (categoryIdVal) {
+    		getAll("id", categoryIdVal, 0, false);
+    	}
+    }
+    
     function getAllUsers() {
     	setTimeout(function () {
             $.ajax({
@@ -156,12 +180,31 @@ $(document).ready(function () {
         }, 300)
     }
 
-    function getAll(fromId = 1, sortBy, isFirst) {
-    	// TODO - Use sortBY and fromId
+    function getAll(sortCriteria, categoryId, userId, isFirst) {
+    	let queryParams = '';
+    	
+    	if (!isFirst) {
+	    	if (sortCriteria && categoryId && userId) {
+	    		queryParams = `?sortCriteria=${sortCriteria}&categoryId=${categoryId}&userId=${userId}`
+	    	} else if (sortCriteria && categoryId) {
+	    		queryParams = `?sortCriteria=${sortCriteria}&categoryId=${categoryId}`
+	    	} else if (categoryId && userId) {
+	    		queryParams = `?categoryId=${categoryId}&userId=${userId}`
+	    	} else if (sortCriteria && userId) {
+	    		queryParams = `?sortCriteria=${sortCriteria}&userId=${userId}`
+	    	} else if (sortCriteria) {
+	    		queryParams = `?sortCriteria=${sortCriteria}`
+	    	} else if (userId) {
+	    		queryParams = `?userId=${userId}`
+	    	} else if (categoryId) {
+	    		queryParams = `?categoryId=${categoryId}`
+	    	}
+    	}
+    	
         setTimeout(function () {
             $.ajax({
                 method: "GET",
-                url: `${apiUrl}`,
+                url: `${apiUrl}${queryParams}`,
                 dataType: "json"
             }).done(function (data) { 
                 currentResult = [...data];
@@ -170,7 +213,7 @@ $(document).ready(function () {
             }).catch(function (err) {
                 onApiError(err);
             });
-        }, 300)
+        }, 150)
     }
 
     function addCard(title, description, categoryId) {
