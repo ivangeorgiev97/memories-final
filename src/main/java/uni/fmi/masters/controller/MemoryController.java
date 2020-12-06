@@ -1,6 +1,7 @@
 package uni.fmi.masters.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,9 +29,25 @@ public class MemoryController {
 	}
 	
 	@GetMapping(value = "/memories")
-	public List<MemoryBean> getAllMemories() {
+	public List<MemoryBean> getAllMemories(@RequestParam Optional<String> sortCriteria, @RequestParam Optional<Integer> categoryId, @RequestParam Optional<Long> userId) {
 		try {
-			return memoryService.getAllMemories();
+			if (sortCriteria.isPresent() && categoryId.isPresent() && userId.isPresent()) {
+				return memoryService.getAllMemories(sortCriteria.get(), categoryId.get(), userId.get());
+			} else if (sortCriteria.isPresent() && categoryId.isPresent()) {
+				return memoryService.getAllMemories(sortCriteria.get(), categoryId.get(), (long)0);
+			} else if (sortCriteria.isPresent() && userId.isPresent()) {
+				return memoryService.getAllMemories(sortCriteria.get(), 0, userId.get());
+			} else if (categoryId.isPresent() && userId.isPresent()) {
+				return memoryService.getAllMemories("id", categoryId.get(), userId.get());
+			} else if (sortCriteria.isPresent()) {
+				return memoryService.getAllMemories(sortCriteria.get(), 0, (long)0);
+			} else if (categoryId.isPresent()) {
+				return memoryService.getAllMemories("id", categoryId.get(), (long)0);
+			} else if (userId.isPresent()) {
+				return memoryService.getAllMemories("id", 0, userId.get());
+			}
+			
+			return memoryService.getAllMemories("id", 0 , (long)0);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -68,7 +68,6 @@
                             <select class="form-control custom-select" id="sort-by">
                                 <option value="" selected disabled hidden>Моля изберете</option>
                                 <option value="title">Заглавие</option>
-                                <option value="date">Дата</option>
                                 <option value="id">Идентификатор</option>
                             </select>
                         </div>

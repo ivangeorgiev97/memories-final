@@ -3,6 +3,7 @@ package uni.fmi.masters.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import uni.fmi.masters.bean.CategoryBean;
@@ -21,8 +22,18 @@ public class MemoryService {
 		this.categoryRepository = categoryRepository;
 	}
 	
-	public List<MemoryBean> getAllMemories() {
-		return memoryRepository.findAll();
+	public List<MemoryBean> getAllMemories(String sortingCriteria, Integer filterCategoryId, Long filterUserId) {
+		Sort sortBy = Sort.by(sortingCriteria);
+		
+		if (filterCategoryId > 0 && filterUserId > 0) {
+			return memoryRepository.findByUserIdAndCategoryId(filterUserId, filterCategoryId, sortBy);
+		} else if (filterCategoryId > 0) {
+			return memoryRepository.findByCategoryId(filterCategoryId, sortBy);
+		} else if (filterUserId > 0) {
+			return memoryRepository.findByUserId(filterUserId, sortBy);
+		}
+		
+		return memoryRepository.findAll(sortBy);
 	}
 	
 	public MemoryBean getMemoryById(Long id) {
