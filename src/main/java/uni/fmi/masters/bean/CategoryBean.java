@@ -32,4 +32,10 @@ public class CategoryBean implements Serializable {
 	
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	private List<MemoryBean> memories;
+	
+	public CategoryBean() {}
+	
+	public CategoryBean(String name) {
+		this.name = name;
+	}
 }	
